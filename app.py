@@ -63,11 +63,13 @@ def solve():
     try:
         gauss_solver = Gauss(coefficients, results)
         solution = gauss_solver.solve()
+        steps = gauss_solver.get_steps()
     except Exception as e:
-        return render_template("index.html", step=1, error=f"Error al resolver el sistema: {str(e)}")
+        error_msg = str(e) if "No tiene solución" in str(e) else "No tiene solución"
+        return render_template("index.html", step=1, error=f"Error al resolver el sistema: {error_msg}")
 
-    return render_template("result.html", solution=solution)
+    return render_template("result.html", solution=solution, steps=steps)
 
+# Vercel needs this variable to be named 'app'
 if __name__ == "__main__":
     app.run(debug=True)
-
