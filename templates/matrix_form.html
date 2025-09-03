@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Ingresar matriz</title>
+</head>
+<body>
+    <h2>Ingresar coeficientes del sistema</h2>
+    <form method="POST">
+        <input type="hidden" name="n" value="{{ n }}">
+        <input type="hidden" name="m" value="{{ m }}">
+        <input type="hidden" name="matrix_input" value="1">
+
+        <table border="1">
+            {% for i in range(m) %}
+                <tr>
+                    {% for j in range(n) %}
+                        <td>
+                            <input type="number" step="any" name="a{{ i }}{{ j }}" required>
+                        </td>
+                    {% endfor %}
+                    <td>
+                        <input type="number" step="any" name="b{{ i }}" required>
+                    </td>
+                </tr>
+            {% endfor %}
+        </table>
+        <br>
+        <button type="submit">Resolver</button>
+    </form>
+</body>
+</html>

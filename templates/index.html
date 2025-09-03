@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Sistema de Ecuaciones</title>
+</head>
+<body>
+    <h1>Resolver Sistema de Ecuaciones</h1>
+
+    {% if error %}
+        <p style="color: red;">{{ error }}</p>
+    {% endif %}
+
+    {% if step == 1 %}
+        <form method="POST" action="/">
+            <label for="num_vars">Número de variables:</label>
+            <input type="number" id="num_vars" name="num_vars" min="1" required>
+            <br><br>
+            <label for="num_eqs">Número de ecuaciones:</label>
+            <input type="number" id="num_eqs" name="num_eqs" min="1" required>
+            <br><br>
+            <button type="submit">Continuar</button>
+        </form>
+    {% elif step == 2 %}
+        <form method="POST" action="/solve">
+            <input type="hidden" name="num_vars" value="{{ num_vars }}">
+            <input type="hidden" name="num_eqs" value="{{ num_eqs }}">
+
+            <table border="1">
+                {% for i in range(num_eqs) %}
+                    <tr>
+                        {% for j in range(num_vars) %}
+                            <td><input type="number" step="any" name="cell_{{ i }}_{{ j }}" required></td>
+                        {% endfor %}
+                        <!-- término independiente -->
+                        <td><input type="number" step="any" name="cell_{{ i }}_{{ num_vars }}" required></td>
+                    </tr>
+                {% endfor %}
+            </table>
+            <br>
+            <button type="submit">Resolver</button>
+        </form>
+    {% endif %}
+</body>
+</html>
+
+

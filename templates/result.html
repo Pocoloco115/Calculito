@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Resultado del Sistema de Ecuaciones</title>
+</head>
+<body>
+    <h1>Resultado</h1>
+    {% if solution %}
+        <p>Solución del sistema:</p>
+        <ul>
+            {% for value in solution %}
+                <li>x{{ loop.index }} = {{ value }}</li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>No se encontró una solución válida.</p>
+    {% endif %}
+    <a href="/">Volver</a>
+</body>
+</html>
