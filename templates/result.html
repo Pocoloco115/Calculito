@@ -300,7 +300,7 @@
                     {% for value in solution %}
                         <li class="solution-item">
                             <span class="variable">x<sub>{{ loop.index }}</sub> =</span>
-                            <span class="value">{{ "%.6f"|format(value) }}</span>
+                            <span class="value">{{ value }}</span>
                         </li>
                     {% endfor %}
                 </ul>

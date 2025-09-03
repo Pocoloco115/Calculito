@@ -61,8 +61,8 @@ def solve():
         return render_template("index.html", step=1, error="Error: Vector de resultados no válido.")
 
     try:
-        gauss_solver = Gauss(coefficients, results)
-        solution = gauss_solver.solve()
+        gauss_solver = Gauss(coefficients, results, use_fractions=True)
+        solution = gauss_solver.get_formatted_solution()
         steps = gauss_solver.get_steps()
     except Exception as e:
         error_msg = str(e) if "No tiene solución" in str(e) else "No tiene solución"
