@@ -1,20 +1,364 @@
 <!DOCTYPE html>
-<html>
+<html lang="es">
 <head>
-    <title>Resultado del Sistema de Ecuaciones</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resultado - Calculadora de Álgebra Lineal</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #a8e6cf 0%, #dcedc1 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            padding: 40px;
+            max-width: 900px;
+            width: 100%;
+            animation: fadeIn 0.6s ease-out;
+            text-align: center;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        h1 {
+            color: #5d4e75;
+            margin-bottom: 30px;
+            font-size: 2.5em;
+            font-weight: 300;
+        }
+
+        .success-icon {
+            font-size: 4em;
+            margin-bottom: 20px;
+            animation: bounce 1s ease-in-out;
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% {
+                transform: translateY(0);
+            }
+            40% {
+                transform: translateY(-10px);
+            }
+            60% {
+                transform: translateY(-5px);
+            }
+        }
+
+        .solution-container {
+            background: #faf8ff;
+            border-radius: 15px;
+            padding: 30px;
+            margin: 30px 0;
+            border-left: 5px solid #a8e6cf;
+            text-align: center;
+        }
+
+        .solution-title {
+            color: #5d4e75;
+            font-size: 1.3em;
+            font-weight: 600;
+            margin-bottom: 20px;
+        }
+
+        .solution-list {
+            list-style: none;
+            padding: 0;
+            display: inline-block;
+            text-align: left;
+        }
+
+        .solution-item {
+            background: white;
+            margin: 10px 0;
+            padding: 15px 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            font-size: 1.2em;
+            font-weight: 500;
+            color: #5d4e75;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: transform 0.2s ease;
+        }
+
+        .solution-item:hover {
+            transform: translateX(5px);
+        }
+
+        .variable {
+            color: #b8a9d9;
+            font-weight: bold;
+        }
+
+        .value {
+            color: #a8e6cf;
+            font-weight: bold;
+        }
+
+        .no-solution {
+            background: #e74c3c;
+            color: white;
+            padding: 20px;
+            border-radius: 15px;
+            margin: 30px 0;
+            font-size: 1.2em;
+        }
+
+        /* Added styles for step-by-step solution display */
+        .steps-container {
+            background: #f0e6ff;
+            border-radius: 15px;
+            padding: 30px;
+            margin: 30px 0;
+            text-align: left;
+            max-height: 600px;
+            overflow-y: auto;
+        }
+
+        .steps-title {
+            color: #5d4e75;
+            font-size: 1.3em;
+            font-weight: 600;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .step-item {
+            background: white;
+            margin: 15px 0;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+            border-left: 4px solid #b8a9d9;
+        }
+
+        .step-description {
+            color: #5d4e75;
+            font-weight: 600;
+            margin-bottom: 15px;
+            font-size: 1.1em;
+        }
+
+        .matrix-display {
+            font-family: 'Courier New', monospace;
+            background: #faf8ff;
+            padding: 15px;
+            border-radius: 8px;
+            overflow-x: auto;
+            margin-top: 10px;
+        }
+
+        .matrix-row {
+            display: flex;
+            justify-content: center;
+            margin: 5px 0;
+        }
+
+        .matrix-cell {
+            min-width: 80px;
+            text-align: center;
+            padding: 5px;
+            margin: 0 2px;
+            background: white;
+            border-radius: 4px;
+            border: 1px solid #f0e6ff;
+            font-size: 0.9em;
+            color: #000000; /* Changed matrix values to black color */
+        }
+
+        .matrix-separator {
+            display: flex;
+            align-items: center;
+            margin: 0 10px;
+            font-size: 1.2em;
+            font-weight: bold;
+        }
+
+        .toggle-steps {
+            background: linear-gradient(135deg, #ffcc99, #ffb366);
+            color: #8b4513;
+            padding: 12px 25px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1em;
+            cursor: pointer;
+            margin: 10px;
+            transition: all 0.3s ease;
+            font-weight: 500;
+            width: 250px;
+        }
+
+        .toggle-steps:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 16px rgba(255, 179, 102, 0.3);
+        }
+
+        .btn {
+            background: linear-gradient(135deg, #b8a9d9, #a294c7);
+            color: white;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.1em;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+            margin-top: 20px;
+            width: 250px;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(184, 169, 217, 0.3);
+        }
+
+        .btn:active {
+            transform: translateY(0);
+        }
+
+        .step-indicator {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 30px;
+        }
+
+        .step {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: #a8e6cf;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            margin: 0 10px;
+            position: relative;
+        }
+
+        .step::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 100%;
+            width: 20px;
+            height: 2px;
+            background: #a8e6cf;
+            transform: translateY(-50%);
+        }
+
+        .step:last-child::after {
+            display: none;
+        }
+
+        .hidden {
+            display: none;
+        }
+    </style>
 </head>
 <body>
-    <h1>Resultado</h1>
-    {% if solution %}
-        <p>Solución del sistema:</p>
-        <ul>
-            {% for value in solution %}
-                <li>x{{ loop.index }} = {{ value }}</li>
-            {% endfor %}
-        </ul>
-    {% else %}
-        <p>No se encontró una solución válida.</p>
-    {% endif %}
-    <a href="/">Volver</a>
+    <div class="container">
+        <div class="step-indicator">
+            <div class="step">1</div>
+            <div class="step">2</div>
+            <div class="step">3</div>
+        </div>
+
+        {% if solution %}
+            <h1>¡Sistema Resuelto!</h1>
+            
+            <div class="solution-container">
+                <div class="solution-title">Solución del sistema de ecuaciones:</div>
+                <ul class="solution-list">
+                    {% for value in solution %}
+                        <li class="solution-item">
+                            <span class="variable">x<sub>{{ loop.index }}</sub> =</span>
+                            <span class="value">{{ "%.6f"|format(value) }}</span>
+                        </li>
+                    {% endfor %}
+                </ul>
+            </div>
+
+            {% if steps %}
+            <button class="btn toggle-steps" onclick="toggleSteps()">Mostrar Proceso</button> <!-- Simplified button text -->
+            
+            <div id="stepsContainer" class="steps-container hidden">
+                <div class="steps-title">Proceso de Resolución - Método de Eliminación Gaussiana</div>
+                
+                {% for step in steps %}
+                <div class="step-item">
+                    <div class="step-description">{{ step.description }}</div>
+                    <div class="matrix-display">
+                        {% for i in range(step.matrix|length) %}
+                        <div class="matrix-row">
+                            {% for j in range(step.matrix[i]|length) %}
+                            <div class="matrix-cell">{{ step.matrix[i][j] }}</div>
+                            {% endfor %}
+                            <div class="matrix-separator">|</div>
+                            <div class="matrix-cell">{{ step.results[i] }}</div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            {% endif %}
+
+        {% else %}
+            <h1>Sin Solución</h1>
+            <div class="no-solution">
+                No se encontró una solución válida para el sistema de ecuaciones.
+                <br><br>
+                Esto puede ocurrir cuando:
+                <br>• El sistema es inconsistente
+                <br>• La matriz es singular
+                <br>• Hay ecuaciones contradictorias
+            </div>
+        {% endif %}
+        
+        <a href="/" class="btn">Resolver Otro Sistema</a>
+    </div>
+
+    <script>
+        function toggleSteps() {
+            const container = document.getElementById('stepsContainer');
+            const button = document.querySelector('.toggle-steps');
+            
+            if (container.classList.contains('hidden')) {
+                container.classList.remove('hidden');
+                button.textContent = 'Ocultar Proceso';
+            } else {
+                container.classList.add('hidden');
+                button.textContent = 'Mostrar Proceso';
+            }
+        }
+    </script>
 </body>
 </html>
