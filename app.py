@@ -39,12 +39,11 @@ def solve():
     except ValueError:
         return render_template("index.html", step=1, error="Error: Número de variables o ecuaciones no válido.")
 
-    # Construcción de la matriz aumentada
     matrix = []
     try:
         for i in range(num_eqs):
             row = []
-            for j in range(num_vars + 1):  # +1 incluye términos independientes
+            for j in range(num_vars + 1): 
                 val = request.form.get(f"cell_{i}_{j}")
                 if val is None:
                     return render_template("index.html", step=1, error=f"Error: Falta el valor en la celda ({i}, {j}).")
@@ -53,17 +52,14 @@ def solve():
     except ValueError:
         return render_template("index.html", step=1, error="Error: Ingrese valores numéricos válidos en la matriz.")
 
-    # Separar la matriz en coeficientes y términos independientes
-    coefficients = [row[:-1] for row in matrix]  # Todas las columnas excepto la última
-    results = [row[-1] for row in matrix]  # Última columna (términos independientes)
+    coefficients = [row[:-1] for row in matrix] 
+    results = [row[-1] for row in matrix]  
 
-    # Validar dimensiones
     if len(coefficients) != num_eqs or any(len(row) != num_vars for row in coefficients):
         return render_template("index.html", step=1, error="Error: Dimensiones de la matriz no válidas.")
     if len(results) != num_eqs:
         return render_template("index.html", step=1, error="Error: Vector de resultados no válido.")
 
-    # Usamos la clase Gauss
     try:
         gauss_solver = Gauss(coefficients, results)
         solution = gauss_solver.solve()
