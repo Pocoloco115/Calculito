@@ -70,6 +70,5 @@ def solve():
 
     return render_template("result.html", solution=solution, steps=steps)
 
-# Vercel needs this variable to be named 'app'
 if __name__ == "__main__":
     app.run(debug=True)
