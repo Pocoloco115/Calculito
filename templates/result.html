@@ -295,16 +295,46 @@
             <h1>¡Sistema Resuelto!</h1>
             
             <div class="solution-container">
-                <div class="solution-title">Solución del sistema de ecuaciones:</div>
+                <div class="solution-title">Clasificación del sistema</div>
                 <ul class="solution-list">
-                    {% for value in solution %}
-                        <li class="solution-item">
-                            <span class="variable">x<sub>{{ loop.index }}</sub> =</span>
-                            <span class="value">{{ value }}</span>
-                        </li>
-                    {% endfor %}
+                    <li class="solution-item">
+                        <span class="variable">Consistencia:</span>
+                        <span class="value">{{ 'Consistente' if consistent else 'Inconsistente' }}</span>
+                    </li>
+                    <li class="solution-item">
+                        <span class="variable">Tipo de solución:</span>
+                        <span class="value">{{ tipo }}</span>
+                    </li>
+                    <li class="solution-item">
+                        <span class="variable">Rango (rank):</span>
+                        <span class="value">{{ rank }}</span>
+                    </li>
                 </ul>
             </div>
+
+            <!-- Pivote de cada columna -->
+        <div class="solution-container">
+            <div class="solution-title">Pivote de cada columna</div>
+            <ul class="solution-list">
+                {% for linea in pivot_report %}
+                    <li class="solution-item">
+                        <span class="value">{{ linea }}</span>
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+        
+        <!-- Solución del sistema -->
+        <div class="solution-container">
+            <div class="solution-title">Solución del sistema de ecuaciones:</div>
+            <ul class="solution-list">
+                {% for linea in solution %}
+                    <li class="solution-item">
+                        <span class="value">{{ linea }}</span>
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
 
             {% if steps %}
             <button class="btn toggle-steps" onclick="toggleSteps()">Mostrar Proceso</button> <!-- Simplified button text -->

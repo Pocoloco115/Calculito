@@ -24,6 +24,7 @@ def index():
     return render_template("index.html", step=1)
 
 @app.route("/solve", methods=["POST"])
+
 def solve():
     num_vars = request.form.get("num_vars")
     num_eqs = request.form.get("num_eqs")
@@ -64,6 +65,22 @@ def solve():
         gauss_solver = Gauss(coefficients, results, use_fractions=True)
         solution = gauss_solver.get_formatted_solution()
         steps = gauss_solver.get_steps()
+        
+        # Clasificación + pivotes
+        info = gauss_solver.get_classification()
+        pivot_report = gauss_solver.get_pivot_report()
+
+        return render_template(
+            "result.html",
+            solution=solution,       # << se mantiene igual (tu lista bonita)
+            steps=steps,             # << se mantiene igual (proceso)
+            # NUEVO:
+            consistent=info["consistent"],
+            tipo=("Única" if info["status"] == "unique" else ("Infinitas" if info["status"] == "infinite" else "Ninguna")),
+            rank=info["rank"],
+            n=info["n"],
+            pivot_report=pivot_report
+        )
     except Exception as e:
         error_msg = str(e) if "No tiene solución" in str(e) else "No tiene solución"
         return render_template("index.html", step=1, error=f"Error al resolver el sistema: {error_msg}")

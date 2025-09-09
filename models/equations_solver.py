@@ -43,11 +43,19 @@ class Gauss:
             "results": results
         })
 
-    def _rref(self):
+    def _ref(self):
+        """
+        Lleva la matriz aumentada a FORMA ESCALONADA (REF)
+        con pivoteo parcial y eliminación SOLO por debajo.
+        Devuelve la lista de posiciones de pivote en orden: [(fila, col), ...]
+        """
         m, n = self.m, self.n
         row = 0
+        pivot_pos = []
         self._snapshot("Matriz inicial")
+
         for col in range(n):
+            # Buscar pivote (mayor |valor| desde 'row' hacia abajo)
             pivot_row = None
             pivot_abs = 0.0
             for r in range(row, m):
@@ -58,28 +66,48 @@ class Gauss:
             if pivot_row is None or pivot_abs <= self.tol:
                 continue
 
+            # Intercambio si hace falta
             if pivot_row != row:
                 self.aug[row], self.aug[pivot_row] = self.aug[pivot_row], self.aug[row]
                 self._snapshot(f"F{row+1} ↔ F{pivot_row+1}")
 
+            # Normalizar pivote a 1
             pivot = self.aug[row][col]
-            self.aug[row] = [val / pivot for val in self.aug[row]]
-            self._snapshot(f"F{row+1} ← F{row+1} ÷ {self._format_number(pivot)}")
+            if pivot != 0:
+                self.aug[row] = [v / pivot for v in self.aug[row]]
+                self._snapshot(f"F{row+1} ← F{row+1} ÷ {self._format_number(pivot)}")
 
-            for r in range(m):
-                if r == row:
-                    continue
+            # Anular por DEBAJO del pivote
+            for r in range(row + 1, m):
                 factor = self.aug[r][col]
                 if (isinstance(factor, Fraction) and factor == 0) or (not isinstance(factor, Fraction) and abs(float(factor)) <= self.tol):
                     continue
-                self.aug[r] = [self.aug[r][j] - factor * self.aug[row][j] for j in range(n+1)]
+                self.aug[r] = [self.aug[r][j] - factor * self.aug[row][j] for j in range(n + 1)]
                 self._snapshot(f"F{r+1} ← F{r+1} − ({self._format_number(factor)})·F{row+1}")
 
+            pivot_pos.append((row, col))
             row += 1
             if row >= m:
                 break
 
+        self._snapshot("FORMA ESCALONADA (REF)")
+        return pivot_pos
+
+    def _to_rref(self, pivot_pos):
+        """
+        Parte desde REF y realiza la eliminación hacia ARRIBA
+        para obtener RREF (forma escalonada reducida por filas).
+        """
+        for r, c in reversed(pivot_pos):
+            for up in range(r - 1, -1, -1):
+                factor = self.aug[up][c]
+                if (isinstance(factor, Fraction) and factor == 0) or (not isinstance(factor, Fraction) and abs(float(factor)) <= self.tol):
+                    continue
+                self.aug[up] = [self.aug[up][j] - factor * self.aug[r][j] for j in range(self.n + 1)]
+                self._snapshot(f"F{up+1} ← F{up+1} − ({self._format_number(factor)})·F{r+1}")
+
         self._snapshot("Matriz en forma reducida (RREF)")
+
 
     def solve(self, do_rref=True):
         self.steps = []
@@ -88,7 +116,10 @@ class Gauss:
         self.solution = None
         self.status = None
 
-        self._rref()
+        pivot_pos = self._ref()
+        self._to_rref(pivot_pos)
+        
+        self.pivot_cols = [c for (_, c) in pivot_pos]
 
         inconsistent = False
         for r in range(self.m):
@@ -186,3 +217,46 @@ class Gauss:
             out.append(f"x{j+1} = {expr_str}")
         return out
 
+    def get_classification(self):
+            """
+            Devuelve un dict con:
+            - consistent: bool
+            - status: 'unique' | 'infinite' | 'inconsistent'
+            - rank: int
+            - m, n
+            """
+            if not self._solved:
+                self.solve()
+            return {
+                "consistent": self.status != "inconsistent",
+                "status": self.status,
+                "rank": len(self.pivot_cols),
+                "m": self.m,
+                "n": self.n,
+            }
+
+    def get_pivot_report(self):
+        """
+        Lista de strings 'Columna j: ...' con el pivote de cada columna.
+        Si la columna j tiene pivote, indica en qué fila está (valor 1 en RREF).
+        Si no, dice 'sin pivote (variable libre)'.
+        """
+        if not self._solved:
+            self.solve()
+
+        # Mapa columna->fila del pivote (a partir de self.aug ya en RREF)
+        col2row = {}
+        row = 0
+        for c in range(self.n):
+            if row < self.m and (abs(float(self.aug[row][c])) if not isinstance(self.aug[row][c], Fraction) else self.aug[row][c] != 0):
+                # En RREF, si hay pivote debe ser 1; pero no dependemos de eso para localizarlo
+                col2row[c] = row
+                row += 1
+
+        report = []
+        for j in range(self.n):
+            if j in col2row:
+                report.append(f"Columna {j+1}: pivote en fila {col2row[j]+1} (valor 1)")
+            else:
+                report.append(f"Columna {j+1}: sin pivote (variable libre)")
+        return report
