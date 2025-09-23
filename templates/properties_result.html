@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resultados de Propiedades</title>
+    <style>
+        /* Reutilizo los mismos estilos que en result.html */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #a8e6cf 0%, #dcedc1 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            padding: 40px;
+            max-width: 900px;
+            width: 100%;
+            animation: fadeIn 0.6s ease-out;
+            text-align: center;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        h1 {
+            color: #5d4e75;
+            margin-bottom: 30px;
+            font-size: 2.5em;
+            font-weight: 300;
+        }
+
+        h2 {
+            color: #5d4e75;
+            font-size: 1.8em;
+            font-weight: 500;
+            margin: 20px 0;
+        }
+
+        .solution-container {
+            background: #faf8ff;
+            border-radius: 15px;
+            padding: 30px;
+            margin: 30px 0;
+            border-left: 5px solid #a8e6cf;
+            text-align: center;
+        }
+
+        .solution-title {
+            color: #5d4e75;
+            font-size: 1.3em;
+            font-weight: 600;
+            margin-bottom: 20px;
+        }
+
+        .solution-list {
+            list-style: none;
+            padding: 0;
+            display: inline-block;
+            text-align: left;
+        }
+
+        .solution-item {
+            background: white;
+            margin: 10px 0;
+            padding: 15px 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            font-size: 1.2em;
+            font-weight: 500;
+            color: #5d4e75;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: transform 0.2s ease;
+        }
+
+        .solution-item:hover {
+            transform: translateX(5px);
+        }
+
+        .variable {
+            color: #b8a9d9;
+            font-weight: bold;
+        }
+
+        .value {
+            color: #a8e6cf;
+            font-weight: bold;
+        }
+
+        .btn {
+            background: linear-gradient(135deg, #b8a9d9, #a294c7);
+            color: white;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.1em;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+            margin-top: 20px;
+            width: 250px;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(184, 169, 217, 0.3);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Resultados de Propiedades Algebraicas</h1>
+        
+        <div class="solution-container">
+            <div class="solution-title">Cálculos Básicos</div>
+            <ul class="solution-list">
+                <li class="solution-item"><span class="variable">u + v:</span>
+                    <span class="value">{{ computations.sum_uv|fmt_vec }}</span></li>
+
+                <li class="solution-item"><span class="variable">k * u:</span>
+                    <span class="value">{{ computations.k_u|fmt_vec }}</span></li>
+
+                <li class="solution-item"><span class="variable">Vector cero:</span>
+                    <span class="value">{{ computations.zero|fmt_vec }}</span></li>
+
+                <li class="solution-item"><span class="variable">Vector opuesto de u:</span>
+                    <span class="value">{{ computations.opposite_u|fmt_vec }}</span></li>
+
+                <li class="solution-item"><span class="variable">u + 0:</span>
+                    <span class="value">{{ computations.sum_u_zero|fmt_vec }}</span></li>
+
+                <li class="solution-item"><span class="variable">u + (-u):</span>
+                    <span class="value">{{ computations.sum_u_opp|fmt_vec }}</span></li>
+
+                <li class="solution-item"><span class="variable">w = k * v:</span>
+                    <span class="value">{{ computations.w|fmt_vec }}</span></li>
+
+                <li class="solution-item"><span class="variable">(u + v) + w:</span>
+                    <span class="value">{{ computations.sum_uv_w|fmt_vec }}</span></li>
+
+                <li class="solution-item"><span class="variable">u + (v + w):</span>
+                    <span class="value">{{ computations.sum_u_vw|fmt_vec }}</span></li>
+            </ul>
+        </div>
+        
+        <div class="solution-container">
+            <div class="solution-title">Verificaciones</div>
+            <ul class="solution-list">
+                <li class="solution-item"><span class="variable">Conmutativa (u + v = v + u):</span><span class="value">{{ 'Verdadero' if verifications.commutative else 'Falso' }}</span></li>
+                <li class="solution-item"><span class="variable">Asociativa ((u + v) + w = u + (v + w)):</span><span class="value">{{ 'Verdadero' if verifications.associative else 'Falso' }}</span></li>
+                <li class="solution-item"><span class="variable">Existencia de cero (u + 0 = u):</span><span class="value">{{ 'Verdadero' if verifications.zero_exists else 'Falso' }}</span></li>
+                <li class="solution-item"><span class="variable">Existencia de opuesto (u + (-u) = 0):</span><span class="value">{{ 'Verdadero' if verifications.opposite_exists else 'Falso' }}</span></li>
+            </ul>
+        </div>
+        
+        <a href="/properties" class="btn">Volver</a>
+    </div>
+</body>
+</html>

@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ecuación Matricial</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: #1f1f1f;
+            border: 1px solid #333;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+            padding: 40px;
+            max-width: 900px;
+            width: 100%;
+            animation: fadeIn 0.6s ease-out;
+            text-align: center;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        h1 {
+            color: #ffffff;
+            margin-bottom: 20px;
+            font-size: 2.5em;
+            font-weight: 300;
+        }
+
+        .subtitle {
+            color: #b0b0b0;
+            font-size: 1.2em;
+            margin-bottom: 30px;
+        }
+
+        .error {
+            background: #dc3545;
+            color: white;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+
+        .step-indicator {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 30px;
+        }
+
+        .step {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: #333;
+            color: #b0b0b0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            margin: 0 10px;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        .step.active {
+            background: #ffffff;
+            color: #000000;
+        }
+
+        .step.completed {
+            background: #28a745;
+            color: white;
+        }
+
+        .step::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 100%;
+            width: 20px;
+            height: 2px;
+            background: #333;
+            transform: translateY(-50%);
+        }
+
+        .step:last-child::after {
+            display: none;
+        }
+
+        .form-group {
+            margin: 20px 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .form-group label {
+            font-size: 1.1em;
+            color: #ffffff;
+            margin-right: 10px;
+            font-weight: 500;
+        }
+
+        .form-group input {
+            padding: 12px;
+            font-size: 1em;
+            border: 2px solid #333;
+            border-radius: 8px;
+            width: 100px;
+            text-align: center;
+            background: #2a2a2a;
+            color: #ffffff;
+            transition: all 0.3s ease;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: #ffffff;
+            background: #333;
+        }
+
+        .form-group input::placeholder {
+            color: #888;
+        }
+
+        .matrix-info {
+            margin: 20px 0;
+            color: #ffffff;
+            font-size: 1.2em;
+            font-weight: 500;
+        }
+
+        .math-symbols {
+            font-size: 1.3em;
+            color: #b0b0b0;
+            margin-top: 10px;
+        }
+
+        .matrix-container {
+            margin: 30px 0;
+        }
+
+        .matrix-table {
+            margin: 0 auto;
+            border-collapse: collapse;
+        }
+
+        .matrix-table td {
+            padding: 10px;
+        }
+
+        .matrix-table input {
+            width: 80px;
+            padding: 10px;
+            font-size: 1em;
+            border: 2px solid #333;
+            border-radius: 8px;
+            text-align: center;
+            background: #2a2a2a;
+            color: #ffffff;
+            transition: all 0.3s ease;
+        }
+
+        .matrix-table input:focus {
+            outline: none;
+            border-color: #ffffff;
+            background: #333;
+        }
+
+        .matrix-table input::placeholder {
+            color: #888;
+        }
+
+        .result-column input {
+            border-color: #666;
+        }
+
+        .result-column input:focus {
+            border-color: #ffffff;
+        }
+
+        .btn {
+            background: #ffffff;
+            color: #000000;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.1em;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-block;
+            margin-top: 20px;
+            text-decoration: none;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(255, 255, 255, 0.2);
+            background: #f0f0f0;
+        }
+
+        .btn:active {
+            transform: translateY(0);
+        }
+
+        .btn-secondary {
+            background: #333;
+            color: #ffffff;
+            margin-left: 10px;
+        }
+
+        .btn-secondary:hover {
+            background: #444;
+            box-shadow: 0 10px 20px rgba(255, 255, 255, 0.1);
+        }
+
+        .btn-group {
+            margin-top: 1rem;
+        }
+
+        /* Separador visual para la matriz aumentada */
+        td:has(+ td:contains("|")) {
+            border-right: 2px solid #666;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Ecuación Matricial</h1>
+        <p class="subtitle">Resuelve A X = B, donde B puede ser vector o matriz</p>
+
+        {% if error %}
+            <div class="error">
+                {{ error }}
+            </div>
+        {% endif %}
+
+        {% if step == 1 %}
+            <div class="step-indicator">
+                <div class="step active">1</div>
+                <div class="step">2</div>
+                <div class="step">3</div>
+            </div>
+
+            <form method="POST" action="/matrix_equation">
+                <div class="form-group">
+                    <label for="rows_a">Número de filas en A (m):</label>
+                    <input type="number" id="rows_a" name="rows_a" min="1" max="10" required placeholder="Ej: 3">
+                </div>
+                
+                <div class="form-group">
+                    <label for="cols_a">Número de columnas en A (n):</label>
+                    <input type="number" id="cols_a" name="cols_a" min="1" max="10" required placeholder="Ej: 3">
+                </div>
+                
+                <div class="form-group">
+                    <label for="cols_b">Número de columnas en B (p):</label>
+                    <input type="number" id="cols_b" name="cols_b" min="1" max="10" required placeholder="Ej: 1 (para vector)">
+                </div>
+                
+                <button type="submit" class="btn">Continuar</button>
+            </form>
+
+            <div class="btn-group" style="margin-top: 1rem;">
+                <a href="{{ url_for('home') }}" class="btn btn-secondary">Volver al Menú Principal</a>
+            </div>
+
+        {% elif step == 2 %}
+            <div class="step-indicator">
+                <div class="step completed">1</div>
+                <div class="step active">2</div>
+                <div class="step">3</div>
+            </div>
+
+            <div class="matrix-info">
+                <strong>Matriz A de {{ rows_a }}x{{ cols_a }}, B de {{ rows_a }}x{{ cols_b }}</strong>
+                <div class="math-symbols">A X = B</div>
+            </div>
+
+            <form method="POST" action="/solve_matrix_equation">
+                <input type="hidden" name="rows_a" value="{{ rows_a }}">
+                <input type="hidden" name="cols_a" value="{{ cols_a }}">
+                <input type="hidden" name="cols_b" value="{{ cols_b }}">
+
+                <div class="matrix-container">
+                    <p style="text-align: center; margin-bottom: 15px; color: #b0b0b0;">
+                        Ingresa la matriz aumentada [A | B]:
+                    </p>
+                    
+                    <table class="matrix-table">
+                        {% for i in range(rows_a) %}
+                            <tr>
+                                {% for j in range(cols_a) %}
+                                    <td>
+                                        <input type="number" 
+                                               step="any" 
+                                               name="a_{{ i }}_{{ j }}" 
+                                               placeholder="a{{ i+1 }}{{ j+1 }}" 
+                                               required>
+                                    </td>
+                                {% endfor %}
+                                <td style="text-align: center; color: #b0b0b0; font-size: 1.5em; padding: 0 10px;">|</td>
+                                {% for k in range(cols_b) %}
+                                    <td class="result-column">
+                                        <input type="number" 
+                                               step="any" 
+                                               name="b_{{ i }}_{{ k }}" 
+                                               placeholder="b{{ i+1 }}{{ k+1 }}" 
+                                               required>
+                                    </td>
+                                {% endfor %}
+                            </tr>
+                        {% endfor %}
+                    </table>
+                </div>
+                
+                <button type="submit" class="btn">Resolver Ecuación</button>
+            </form>
+        {% endif %}
+    </div>
+</body>
+</html>

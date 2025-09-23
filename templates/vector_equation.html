@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ecuación Vectorial</title>
+    <style>
+        /* Reutilizo los mismos estilos que en matrix_form.html */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #000000;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: #1a1a1a;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+            padding: 40px;
+            max-width: 900px;
+            width: 100%;
+            animation: fadeIn 0.6s ease-out;
+            text-align: center;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        h1 {
+            color: #ffffff;
+            margin-bottom: 20px;
+            font-size: 2.5em;
+            font-weight: 300;
+        }
+
+        .subtitle {
+            color: #cccccc;
+            font-size: 1.2em;
+            margin-bottom: 30px;
+        }
+
+        .error {
+            background: #e74c3c;
+            color: white;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+
+        .step-indicator {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 30px;
+        }
+
+        .step {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: #2563eb;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            margin: 0 10px;
+            position: relative;
+        }
+
+        .step.active {
+            background: #3b82f6;
+        }
+
+        .step.completed {
+            background: #10b981;
+        }
+
+        .step::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 100%;
+            width: 20px;
+            height: 2px;
+            background: #2563eb;
+            transform: translateY(-50%);
+        }
+
+        .step:last-child::after {
+            display: none;
+        }
+
+        .form-group {
+            margin: 20px 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .form-group label {
+            font-size: 1.1em;
+            color: #ffffff;
+            margin-right: 10px;
+            font-weight: 500;
+        }
+
+        .form-group input {
+            padding: 10px;
+            font-size: 1em;
+            border: 2px solid #2563eb;
+            border-radius: 8px;
+            width: 100px;
+            text-align: center;
+            background: #2a2a2a;
+            color: #ffffff;
+        }
+
+        .vector-info {
+            margin: 20px 0;
+            color: #ffffff;
+            font-size: 1.2em;
+            font-weight: 500;
+        }
+
+        .math-symbols {
+            font-size: 1.3em;
+            color: #cccccc;
+            margin-top: 10px;
+        }
+
+        .matrix-container {
+            margin: 30px 0;
+        }
+
+        .matrix-table {
+            margin: 0 auto;
+            border-collapse: collapse;
+        }
+
+        .matrix-table td {
+            padding: 10px;
+        }
+
+        .matrix-table input {
+            width: 80px;
+            padding: 8px;
+            font-size: 1em;
+            border: 2px solid #2563eb;
+            border-radius: 8px;
+            text-align: center;
+            background: #2a2a2a;
+            color: #ffffff;
+        }
+
+        .result-column input {
+            border-color: #8b5cf6;
+        }
+
+        .btn {
+            background: linear-gradient(135deg, #3b82f6, #2563eb);
+            color: white;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.1em;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-block;
+            margin-top: 20px;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(59, 130, 246, 0.3);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Ecuación Vectorial</h1>
+        <p class="subtitle">Resuelve c1 v1 + c2 v2 + ... + cn vn = b</p>
+
+        {% if error %}
+            <div class="error">
+                {{ error }}
+            </div>
+        {% endif %}
+
+        {% if step == 1 %}
+            <div class="step-indicator">
+                <div class="step active">1</div>
+                <div class="step">2</div>
+                <div class="step">3</div>
+            </div>
+
+            <form method="POST" action="/vector_equation">
+                <div class="form-group">
+                    <label for="dimension">Dimensión de los vectores (n):</label>
+                    <input type="number" id="dimension" name="dimension" min="1" max="10" required placeholder="Ej: 3">
+                </div>
+                
+                <div class="form-group">
+                    <label for="num_vectors">Número de vectores (incógnitas ci):</label>
+                    <input type="number" id="num_vectors" name="num_vectors" min="1" max="10" required placeholder="Ej: 2">
+                </div>
+                
+                <button type="submit" class="btn">Continuar</button>
+            </form>
+
+            <div class="btn-group">
+                <a href="{{ url_for('home') }}" class="btn btn-secondary">Volver al Menú Principal</a>
+            </div>
+
+        {% elif step == 2 %}
+            <div class="step-indicator">
+                <div class="step completed">1</div>
+                <div class="step active">2</div>
+                <div class="step">3</div>
+            </div>
+
+            <div class="vector-info">
+                <strong>Ecuación con {{ num_vectors }} vectores en ℝ^{{ dimension }}</strong>
+                <div class="math-symbols">∑ ci vi = b</div>
+            </div>
+
+            <form method="POST" action="/solve_vector_equation">
+                <input type="hidden" name="dimension" value="{{ dimension }}">
+                <input type="hidden" name="num_vectors" value="{{ num_vectors }}">
+
+                <div class="matrix-container">
+                    <p style="text-align: center; margin-bottom: 15px; color: #cccccc;">
+                        Ingresa los vectores vi (columnas) y b:
+                    </p>
+                    
+                    <table class="matrix-table">
+                        {% for i in range(dimension) %}
+                            <tr>
+                                {% for j in range(num_vectors) %}
+                                    <td>
+                                        <input type="number" 
+                                               step="any" 
+                                               name="v_{{ i }}_{{ j }}" 
+                                               placeholder="v{{ j+1 }}{{ i+1 }}" 
+                                               required>
+                                    </td>
+                                {% endfor %}
+                                <td style="text-align: center; color: #cccccc; font-size: 1.5em; padding: 0 10px;">=</td>
+                                <td class="result-column">
+                                    <input type="number" 
+                                           step="any" 
+                                           name="b_{{ i }}" 
+                                           placeholder="b{{ i+1 }}" 
+                                           required>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </table>
+                </div>
+                
+                <button type="submit" class="btn">Resolver Ecuación</button>
+            </form>
+        {% endif %}
+    </div>
+</body>
+</html>

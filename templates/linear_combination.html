@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Combinación Lineal de Vectores</title>
+    <style>
+        /* Converting to dark theme with black/white colors */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            color: #e5e5e5;
+        }
+
+        .container {
+            background: #1f1f1f;
+            border: 1px solid #333;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+            padding: 40px;
+            max-width: 900px;
+            width: 100%;
+            animation: fadeIn 0.6s ease-out;
+            text-align: center;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        h1 {
+            color: #ffffff;
+            margin-bottom: 20px;
+            font-size: 2.5em;
+            font-weight: 400;
+        }
+
+        .subtitle {
+            color: #b0b0b0;
+            font-size: 1.2em;
+            margin-bottom: 30px;
+        }
+
+        .error {
+            background: #dc3545;
+            color: white;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+
+        .step-indicator {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 30px;
+        }
+
+        .step {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: #333;
+            color: #b0b0b0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            margin: 0 10px;
+            position: relative;
+            border: 1px solid #444;
+        }
+
+        .step.active {
+            background: #ffffff;
+            color: #000000;
+        }
+
+        .step.completed {
+            background: #28a745;
+            color: white;
+        }
+
+        .step::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 100%;
+            width: 20px;
+            height: 2px;
+            background: #444;
+            transform: translateY(-50%);
+        }
+
+        .step:last-child::after {
+            display: none;
+        }
+
+        .form-group {
+            margin: 20px 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .form-group label {
+            font-size: 1.1em;
+            color: #e5e5e5;
+            font-weight: 400;
+        }
+
+        .form-group input {
+            padding: 12px;
+            font-size: 1em;
+            border: 1px solid #444;
+            border-radius: 8px;
+            width: 100px;
+            text-align: center;
+            background: #2a2a2a;
+            color: #e5e5e5;
+            transition: all 0.3s ease;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: #ffffff;
+            box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.1);
+        }
+
+        .form-group input::placeholder {
+            color: #888;
+        }
+
+        .vector-info {
+            margin: 20px 0;
+            color: #e5e5e5;
+            font-size: 1.2em;
+            font-weight: 400;
+        }
+
+        .math-symbols {
+            font-size: 1.3em;
+            color: #b0b0b0;
+            margin-top: 10px;
+        }
+
+        .matrix-container {
+            margin: 30px 0;
+        }
+
+        .matrix-table {
+            margin: 0 auto;
+            border-collapse: collapse;
+        }
+
+        .matrix-table td {
+            padding: 10px;
+        }
+
+        .matrix-table input {
+            width: 80px;
+            padding: 10px;
+            font-size: 1em;
+            border: 1px solid #444;
+            border-radius: 8px;
+            text-align: center;
+            background: #2a2a2a;
+            color: #e5e5e5;
+            transition: all 0.3s ease;
+        }
+
+        .matrix-table input:focus {
+            outline: none;
+            border-color: #ffffff;
+            box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.1);
+        }
+
+        .matrix-table input::placeholder {
+            color: #888;
+        }
+
+        .result-column input {
+            border-color: #666;
+            background: #333;
+        }
+
+        .result-column input:focus {
+            border-color: #ffffff;
+        }
+
+        .btn {
+            background: #ffffff;
+            color: #000000;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.1em;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-block;
+            margin: 10px;
+            text-decoration: none;
+        }
+
+        .btn:hover {
+            background: #f0f0f0;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(255, 255, 255, 0.1);
+        }
+
+        .btn-secondary {
+            background: #333;
+            color: #e5e5e5;
+            border: 1px solid #555;
+        }
+
+        .btn-secondary:hover {
+            background: #444;
+            color: #ffffff;
+        }
+
+        .btn-group {
+            margin-top: 20px;
+        }
+
+        /* Added separator styling for matrix */
+        .matrix-table td:has(+ td.result-column) {
+            border-right: 2px solid #555;
+            padding-right: 15px;
+        }
+
+        /* Improved text styling for better readability */
+        p {
+            color: #b0b0b0;
+            line-height: 1.6;
+        }
+
+        strong {
+            color: #ffffff;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Combinación Lineal de Vectores</h1>
+        <p class="subtitle">Determina si un vector objetivo es combinación lineal de un conjunto dado</p>
+
+        {% if error %}
+            <div class="error">
+                {{ error }}
+            </div>
+        {% endif %}
+
+        {% if step == 1 %}
+            <div class="step-indicator">
+                <div class="step active">1</div>
+                <div class="step">2</div>
+                <div class="step">3</div>
+            </div>
+
+            <form method="POST" action="/linear_combination">
+                <div class="form-group">
+                    <label for="dimension">Dimensión de los vectores (n):</label>
+                    <input type="number" id="dimension" name="dimension" min="1" max="10" required placeholder="Ej: 3">
+                </div>
+                
+                <div class="form-group">
+                    <label for="num_vectors">Número de vectores en el conjunto:</label>
+                    <input type="number" id="num_vectors" name="num_vectors" min="1" max="10" required placeholder="Ej: 2">
+                </div>
+                
+                <button type="submit" class="btn">Continuar</button>
+            </form>
+
+            <div class="btn-group">
+                <a href="{{ url_for('home') }}" class="btn btn-secondary">Volver al Menú Principal</a>
+            </div>
+
+        {% elif step == 2 %}
+            <div class="step-indicator">
+                <div class="step completed">1</div>
+                <div class="step active">2</div>
+                <div class="step">3</div>
+            </div>
+
+            <div class="vector-info">
+                <strong>{{ num_vectors }} vectores en ℝ^{{ dimension }}</strong>
+                <div class="math-symbols">¿b ∈ span{v1, ..., v{{ num_vectors }}}?</div>
+            </div>
+
+            <form method="POST" action="/solve_linear_combination">
+                <input type="hidden" name="dimension" value="{{ dimension }}">
+                <input type="hidden" name="num_vectors" value="{{ num_vectors }}">
+
+                <div class="matrix-container">
+                    <p style="text-align: center; margin-bottom: 15px; color: #b0b0b0;">
+                        Ingresa los vectores (columnas) y el vector objetivo b:
+                    </p>
+                    
+                    <table class="matrix-table">
+                        {% for i in range(dimension) %}
+                            <tr>
+                                {% for j in range(num_vectors) %}
+                                    <td>
+                                        <input type="number" 
+                                               step="any" 
+                                               name="v_{{ i }}_{{ j }}" 
+                                               placeholder="v{{ j+1 }}{{ i+1 }}" 
+                                               required>
+                                    </td>
+                                {% endfor %}
+                                <td style="text-align: center; color: #888; font-size: 1.5em; padding: 0 10px;">|</td>
+                                <td class="result-column">
+                                    <input type="number" 
+                                           step="any" 
+                                           name="b_{{ i }}" 
+                                           placeholder="b{{ i+1 }}" 
+                                           required>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </table>
+                </div>
+                
+                <button type="submit" class="btn">Verificar Combinación Lineal</button>
+            </form>
+        {% endif %}
+    </div>
+</body>
+</html>
