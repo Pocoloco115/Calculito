@@ -13,7 +13,8 @@
 
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #a8e6cf 0%, #dcedc1 100%);
+            /* Changed to dark gradient background */
+            background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
             min-height: 100vh;
             display: flex;
             align-items: center;
@@ -22,9 +23,11 @@
         }
 
         .container {
-            background: white;
+            /* Changed to dark container with subtle border */
+            background: #2a2a2a;
+            border: 1px solid #404040;
             border-radius: 20px;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
             padding: 40px;
             max-width: 800px;
             width: 100%;
@@ -43,7 +46,8 @@
         }
 
         h1 {
-            color: #5d4e75;
+            /* Changed to light color for dark theme */
+            color: #f0f0f0;
             text-align: center;
             margin-bottom: 30px;
             font-size: 2.5em;
@@ -52,7 +56,8 @@
 
         .subtitle {
             text-align: center;
-            color: #8b7ca3;
+            /* Changed to light gray for dark theme */
+            color: #b0b0b0;
             margin-bottom: 40px;
             font-size: 1.1em;
         }
@@ -80,7 +85,8 @@
         label {
             display: block;
             margin-bottom: 8px;
-            color: #5d4e75;
+            /* Changed to light color for dark theme */
+            color: #e0e0e0;
             font-weight: 500;
             font-size: 1.1em;
         }
@@ -88,23 +94,32 @@
         input[type="number"] {
             width: 100%;
             padding: 15px;
-            border: 2px solid #f0e6ff;
+            /* Changed to dark input styling */
+            border: 2px solid #404040;
             border-radius: 10px;
             font-size: 1.1em;
             transition: all 0.3s ease;
-            background: #faf8ff;
+            background: #1a1a1a;
+            color: #f0f0f0;
         }
 
         input[type="number"]:focus {
             outline: none;
-            border-color: #b8a9d9;
-            background: white;
-            box-shadow: 0 0 0 3px rgba(184, 169, 217, 0.1);
+            /* Changed focus colors for dark theme */
+            border-color: #666666;
+            background: #333333;
+            box-shadow: 0 0 0 3px rgba(102, 102, 102, 0.1);
+        }
+
+        input[type="number"]::placeholder {
+            /* Added placeholder styling for dark theme */
+            color: #888888;
         }
 
         .btn {
-            background: linear-gradient(135deg, #b8a9d9, #a294c7);
-            color: white;
+            /* Changed to white button with black text for contrast */
+            background: #f0f0f0;
+            color: #1a1a1a;
             padding: 15px 30px;
             border: none;
             border-radius: 10px;
@@ -118,11 +133,24 @@
 
         .btn:hover {
             transform: translateY(-2px);
-            box-shadow: 0 10px 20px rgba(184, 169, 217, 0.3);
+            background: #ffffff;
+            box-shadow: 0 10px 20px rgba(240, 240, 240, 0.2);
         }
 
         .btn:active {
             transform: translateY(0);
+        }
+
+        .btn-secondary {
+            /* Added secondary button styling for dark theme */
+            background: #404040;
+            color: #f0f0f0;
+            border: 1px solid #666666;
+        }
+
+        .btn-secondary:hover {
+            background: #555555;
+            box-shadow: 0 10px 20px rgba(64, 64, 64, 0.3);
         }
 
         .matrix-container {
@@ -145,36 +173,47 @@
             width: 80px;
             height: 50px;
             text-align: center;
-            border: 2px solid #f0e6ff;
+            /* Changed matrix input styling for dark theme */
+            border: 2px solid #404040;
             border-radius: 8px;
             font-size: 1em;
             font-weight: 500;
             transition: all 0.3s ease;
-            color: #000000; /* Changed matrix values color to black */
+            background: #1a1a1a;
+            color: #f0f0f0;
         }
 
         .matrix-table input:focus {
-            border-color: #b8a9d9;
-            box-shadow: 0 0 0 2px rgba(184, 169, 217, 0.1);
+            /* Changed matrix input focus for dark theme */
+            border-color: #666666;
+            box-shadow: 0 0 0 2px rgba(102, 102, 102, 0.1);
+        }
+
+        .matrix-table input::placeholder {
+            /* Added matrix placeholder styling */
+            color: #888888;
         }
 
         .matrix-table .result-column input {
-            background: #ffcc99;
-            color: #8b4513;
-            border-color: #ffb366;
+            /* Changed result column styling for dark theme */
+            background: #3a2a1a;
+            color: #ffcc99;
+            border-color: #5a4a3a;
         }
 
         .matrix-table .result-column input::placeholder {
-            color: rgba(139, 69, 19, 0.7);
+            color: rgba(255, 204, 153, 0.7);
         }
 
         .matrix-info {
-            background: #f0e6ff;
+            /* Changed matrix info styling for dark theme */
+            background: #333333;
+            border: 1px solid #555555;
             padding: 20px;
             border-radius: 10px;
             margin-bottom: 20px;
             text-align: center;
-            color: #5d4e75;
+            color: #e0e0e0;
         }
 
         .step-indicator {
@@ -187,8 +226,9 @@
             width: 40px;
             height: 40px;
             border-radius: 50%;
-            background: #ecf0f1;
-            color: #7f8c8d;
+            /* Changed step styling for dark theme */
+            background: #404040;
+            color: #b0b0b0;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -198,13 +238,15 @@
         }
 
         .step.active {
-            background: #b8a9d9;
-            color: white;
+            /* Changed active step color */
+            background: #f0f0f0;
+            color: #1a1a1a;
         }
 
         .step.completed {
-            background: #a8e6cf;
-            color: white;
+            /* Changed completed step color */
+            background: #4a4a4a;
+            color: #ffffff;
         }
 
         .step::after {
@@ -214,7 +256,8 @@
             left: 100%;
             width: 20px;
             height: 2px;
-            background: #ecf0f1;
+            /* Changed step connector color */
+            background: #404040;
             transform: translateY(-50%);
         }
 
@@ -226,7 +269,12 @@
             text-align: center;
             margin: 20px 0;
             font-size: 1.2em;
-            color: #7f8c8d;
+            /* Changed math symbols color */
+            color: #b0b0b0;
+        }
+
+        .btn-group {
+            margin-top: 2rem;
         }
     </style>
 </head>
@@ -248,7 +296,7 @@
                 <div class="step">3</div>
             </div>
 
-            <form method="POST" action="/">
+            <form method="POST" action="{{ url_for('linear_system') }}">
                 <div class="form-group">
                     <label for="num_vars">Número de incógnitas:</label>
                     <input type="number" id="num_vars" name="num_vars" min="1" max="10" required placeholder="Ej: 3">
@@ -261,6 +309,10 @@
                 
                 <button type="submit" class="btn">Continuar</button>
             </form>
+
+            <div class="btn-group">
+                <a href="{{ url_for('home') }}" class="btn btn-secondary">Volver al Menú Principal</a>
+            </div>
 
         {% elif step == 2 %}
             <div class="step-indicator">
@@ -279,7 +331,7 @@
                 <input type="hidden" name="num_eqs" value="{{ num_eqs }}">
 
                 <div class="matrix-container">
-                    <p style="text-align: center; margin-bottom: 15px; color: #7f8c8d;">
+                    <p style="text-align: center; margin-bottom: 15px; color: #b0b0b0;">
                         Ingresa los coeficientes de la matriz aumentada:
                     </p>
                     
@@ -295,7 +347,7 @@
                                                required>
                                     </td>
                                 {% endfor %}
-                                <td style="text-align: center; color: #7f8c8d; font-size: 1.5em; padding: 0 10px;">|</td>
+                                <td style="text-align: center; color: #b0b0b0; font-size: 1.5em; padding: 0 10px;">|</td>
                                 <td class="result-column">
                                     <input type="number" 
                                            step="any" 

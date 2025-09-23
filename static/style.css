@@ -327,7 +327,7 @@ body {
   .btn-group {
     flex-direction: column;
     align-items: center;
-  }
+  } 
 
   .step-indicator {
     flex-direction: column;
@@ -362,4 +362,9 @@ body {
   font-weight: bold;
   color: var(--primary);
   margin: 0 0.5rem;
+}
+
+/* Utilidad para ocultar contenedores*/
+.hidden {
+  display: none !important;
 }

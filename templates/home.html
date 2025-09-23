@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculadora de Álgebra Lineal</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            /* Softer gradient with more subtle transition */
+            background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .container {
+            /* Softer background color, more welcoming */
+            background: #1f1f1f;
+            /* More rounded corners for friendlier feel */
+            border-radius: 25px;
+            /* Softer shadow */
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
+            /* More generous padding for breathing room */
+            padding: 50px 40px;
+            max-width: 900px;
+            width: 100%;
+            animation: fadeIn 0.6s ease-out;
+            text-align: center;
+            /* Softer border color */
+            border: 1px solid #404040;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        h1 {
+            /* Softer white, less harsh */
+            color: #f5f5f5;
+            margin-bottom: 25px;
+            font-size: 2.5em;
+            /* Reduced font weight for friendlier appearance */
+            font-weight: 600;
+            /* Better line height for readability */
+            line-height: 1.2;
+        }
+
+        p {
+            /* Warmer gray tone */
+            color: #d0d0d0;
+            font-size: 1.2em;
+            /* More spacing for breathing room */
+            margin-bottom: 40px;
+            /* Normal weight, more approachable */
+            font-weight: 400;
+            line-height: 1.4;
+        }
+
+        ul {
+            list-style: none;
+            padding: 0;
+            /* Added spacing between list items */
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        li {
+            margin: 0;
+        }
+
+        a {
+            /* Softer gradient, more welcoming */
+            background: linear-gradient(135deg, #f8f8f8, #e8e8e8);
+            color: #2d2d2d;
+            /* More generous padding for better touch targets */
+            padding: 18px 35px;
+            /* More rounded for friendlier feel */
+            border-radius: 15px;
+            font-size: 1.1em;
+            /* Medium weight, not too bold */
+            font-weight: 500;
+            text-decoration: none;
+            display: inline-block;
+            /* Smoother transition */
+            transition: all 0.4s ease;
+            /* Better line height */
+            line-height: 1.3;
+            /* Subtle border for definition */
+            border: 1px solid #e0e0e0;
+        }
+
+        a:hover {
+            /* Gentler hover effect */
+            transform: translateY(-3px);
+            /* Softer hover shadow */
+            box-shadow: 0 8px 25px rgba(255, 255, 255, 0.15);
+            /* Brighter on hover for friendlier interaction */
+            background: linear-gradient(135deg, #ffffff, #f0f0f0);
+            border-color: #d0d0d0;
+        }
+
+        /* Added subtle animation for better user experience */
+        a:active {
+            transform: translateY(-1px);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Calculadora de Álgebra Lineal</h1>
+        <p>Elige una herramienta para comenzar:</p>
+        <ul>
+            <li><a href="/linear_system">Resolver Sistemas de Ecuaciones Lineales</a></li>
+            <li><a href="/properties">Propiedades Algebraicas de ℝⁿ</a></li>
+            <li><a href="/linear_combination">Combinación Lineal de Vectores</a></li>
+            <li><a href="/vector_equation">Ecuación Vectorial</a></li>
+            <li><a href="/matrix_equation">Ecuación Matricial</a></li>
+        </ul>
+    </div>
+</body>
+</html>
